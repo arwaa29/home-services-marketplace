@@ -1,0 +1,526 @@
+{
+	"info": {
+		"name": "Home Services Marketplace - Full API",
+		"description": "Complete Postman collection for On-Demand Home Services Marketplace Platform",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{ "key": "user_service", "value": "http://localhost:8081" },
+		{ "key": "offer_service", "value": "http://localhost:8082" },
+		{ "key": "booking_service", "value": "http://localhost:8083" },
+		{ "key": "notification_service", "value": "http://localhost:8084" },
+		{ "key": "customer_token", "value": "" },
+		{ "key": "provider_token", "value": "" },
+		{ "key": "admin_token", "value": "" }
+	],
+	"item": [
+		{
+			"name": "1. User Service",
+			"item": [
+				{
+					"name": "1.1 Register Customer",
+					"request": {
+						"method": "POST",
+						"header": [{ "key": "Content-Type", "value": "application/json" }],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"customer1\",\n  \"password\": \"pass123\",\n  \"balance\": 200.0\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8081/users/register/customer",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8081",
+							"path": ["users", "register", "customer"]
+						}
+					}
+				},
+				{
+					"name": "1.2 Register Provider (Plumber)",
+					"request": {
+						"method": "POST",
+						"header": [{ "key": "Content-Type", "value": "application/json" }],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"plumber1\",\n  \"password\": \"pass123\",\n  \"professionType\": \"Plumber\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8081/users/register/provider",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8081",
+							"path": ["users", "register", "provider"]
+						}
+					}
+				},
+				{
+					"name": "1.3 Register Admin",
+					"request": {
+						"method": "POST",
+						"header": [{ "key": "Content-Type", "value": "application/json" }],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"admin1\",\n  \"password\": \"admin123\",\n  \"balance\": 0\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8081/users/register/customer",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8081",
+							"path": ["users", "register", "customer"]
+						}
+					}
+				},
+				{
+					"name": "1.4 Login Customer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": ["pm.collectionVariables.set('customer_token', pm.response.text());"]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [{ "key": "Content-Type", "value": "application/json" }],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"customer1\",\n  \"password\": \"pass123\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8081/users/login",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8081",
+							"path": ["users", "login"]
+						}
+					}
+				},
+				{
+					"name": "1.5 Login Provider",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": ["pm.collectionVariables.set('provider_token', pm.response.text());"]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [{ "key": "Content-Type", "value": "application/json" }],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"plumber1\",\n  \"password\": \"pass123\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8081/users/login",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8081",
+							"path": ["users", "login"]
+						}
+					}
+				},
+				{
+					"name": "1.6 Login Admin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": ["pm.collectionVariables.set('admin_token', pm.response.text());"]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [{ "key": "Content-Type", "value": "application/json" }],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"admin1\",\n  \"password\": \"admin123\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8081/users/login",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8081",
+							"path": ["users", "login"]
+						}
+					}
+				},
+				{
+					"name": "1.7 Add Funds to Wallet",
+					"request": {
+						"method": "PUT",
+						"header": [{ "key": "Authorization", "value": "Bearer {{customer_token}}" }],
+						"url": {
+							"raw": "http://localhost:8081/users/add-funds?amount=100",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8081",
+							"path": ["users", "add-funds"],
+							"query": [{ "key": "amount", "value": "100" }]
+						}
+					}
+				},
+				{
+					"name": "1.8 View Wallet Balance",
+					"request": {
+						"method": "GET",
+						"header": [{ "key": "Authorization", "value": "Bearer {{customer_token}}" }],
+						"url": {
+							"raw": "http://localhost:8081/users/balance",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8081",
+							"path": ["users", "balance"]
+						}
+					}
+				},
+				{
+					"name": "1.9 Admin: View All Users",
+					"request": {
+						"method": "GET",
+						"header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+						"url": {
+							"raw": "http://localhost:8081/users/all",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8081",
+							"path": ["users", "all"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "2. Offer Service",
+			"item": [
+				{
+					"name": "2.1 Admin: Add Service Category",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" },
+							{ "key": "Authorization", "value": "Bearer {{admin_token}}" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Plumbing\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8082/offers/admin/categories",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8082",
+							"path": ["offers", "admin", "categories"]
+						}
+					}
+				},
+				{
+					"name": "2.2 View All Categories",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "http://localhost:8082/offers/admin/categories",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8082",
+							"path": ["offers", "admin", "categories"]
+						}
+					}
+				},
+				{
+					"name": "2.3 Provider: Create Offer",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" },
+							{ "key": "Authorization", "value": "Bearer {{provider_token}}" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"category\": \"Plumbing\",\n  \"description\": \"Expert plumbing repair\",\n  \"price\": 80.0,\n  \"availableDate\": \"2026-05-15\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8082/offers/create",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8082",
+							"path": ["offers", "create"]
+						}
+					}
+				},
+				{
+					"name": "2.4 Provider: View My Offers",
+					"request": {
+						"method": "GET",
+						"header": [{ "key": "Authorization", "value": "Bearer {{provider_token}}" }],
+						"url": {
+							"raw": "http://localhost:8082/offers/my-offers",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8082",
+							"path": ["offers", "my-offers"]
+						}
+					}
+				},
+				{
+					"name": "2.5 Provider: Update Offer",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" },
+							{ "key": "Authorization", "value": "Bearer {{provider_token}}" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"price\": 75.0,\n  \"availableDate\": \"2026-05-20\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8082/offers/update/1",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8082",
+							"path": ["offers", "update", "1"]
+						}
+					}
+				},
+				{
+					"name": "2.6 Customer: Browse by Category",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "http://localhost:8082/offers/category/Plumbing",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8082",
+							"path": ["offers", "category", "Plumbing"]
+						}
+					}
+				},
+				{
+					"name": "2.7 View All Offers",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "http://localhost:8082/offers/all",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8082",
+							"path": ["offers", "all"]
+						}
+					}
+				},
+				{
+					"name": "2.8 Get Offer by ID",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "http://localhost:8082/offers/1",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8082",
+							"path": ["offers", "1"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "3. Booking Service",
+			"item": [
+				{
+					"name": "3.1 Customer: Book a Service",
+					"request": {
+						"method": "POST",
+						"header": [{ "key": "Authorization", "value": "Bearer {{customer_token}}" }],
+						"url": {
+							"raw": "http://localhost:8083/bookings/book/1",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8083",
+							"path": ["bookings", "book", "1"]
+						}
+					}
+				},
+				{
+					"name": "3.2 Customer: View My Bookings",
+					"request": {
+						"method": "GET",
+						"header": [{ "key": "Authorization", "value": "Bearer {{customer_token}}" }],
+						"url": {
+							"raw": "http://localhost:8083/bookings/my-bookings",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8083",
+							"path": ["bookings", "my-bookings"]
+						}
+					}
+				},
+				{
+					"name": "3.3 Provider: View Completed Bookings",
+					"request": {
+						"method": "GET",
+						"header": [{ "key": "Authorization", "value": "Bearer {{provider_token}}" }],
+						"url": {
+							"raw": "http://localhost:8083/bookings/provider/completed",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8083",
+							"path": ["bookings", "provider", "completed"]
+						}
+					}
+				},
+				{
+					"name": "3.4 Provider: View All Bookings",
+					"request": {
+						"method": "GET",
+						"header": [{ "key": "Authorization", "value": "Bearer {{provider_token}}" }],
+						"url": {
+							"raw": "http://localhost:8083/bookings/provider/all",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8083",
+							"path": ["bookings", "provider", "all"]
+						}
+					}
+				},
+				{
+					"name": "3.5 Admin: View All Bookings (Transaction History)",
+					"request": {
+						"method": "GET",
+						"header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+						"url": {
+							"raw": "http://localhost:8083/bookings/all",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8083",
+							"path": ["bookings", "all"]
+						}
+					}
+				},
+				{
+					"name": "3.6 View Booking Stats",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "http://localhost:8083/bookings/stats",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8083",
+							"path": ["bookings", "stats"]
+						}
+					}
+				},
+				{
+					"name": "3.7 Customer: Create Service Request",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" },
+							{ "key": "Authorization", "value": "Bearer {{customer_token}}" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"category\": \"Plumbing\",\n  \"maxPrice\": 100.0,\n  \"requiredDate\": \"2026-05-15\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8083/bookings/service-request",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8083",
+							"path": ["bookings", "service-request"]
+						}
+					}
+				},
+				{
+					"name": "3.8 Customer: View My Service Requests",
+					"request": {
+						"method": "GET",
+						"header": [{ "key": "Authorization", "value": "Bearer {{customer_token}}" }],
+						"url": {
+							"raw": "http://localhost:8083/bookings/service-requests/my",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8083",
+							"path": ["bookings", "service-requests", "my"]
+						}
+					}
+				},
+				{
+					"name": "3.9 Provider: Accept Service Request",
+					"request": {
+						"method": "POST",
+						"header": [{ "key": "Authorization", "value": "Bearer {{provider_token}}" }],
+						"url": {
+							"raw": "http://localhost:8083/bookings/service-request/1/accept",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8083",
+							"path": ["bookings", "service-request", "1", "accept"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "4. Notification Service",
+			"item": [
+				{
+					"name": "4.1 View Customer Notifications",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "http://localhost:8084/notifications/1",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8084",
+							"path": ["notifications", "1"]
+						}
+					}
+				},
+				{
+					"name": "4.2 View Provider Notifications",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "http://localhost:8084/notifications/2",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8084",
+							"path": ["notifications", "2"]
+						}
+					}
+				},
+				{
+					"name": "4.3 View All Notifications",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "http://localhost:8084/notifications/all",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8084",
+							"path": ["notifications", "all"]
+						}
+					}
+				},
+				{
+					"name": "4.4 Admin: View Payment Failure Alerts",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "http://localhost:8084/notifications/admin/alerts",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8084",
+							"path": ["notifications", "admin", "alerts"]
+						}
+					}
+				}
+			]
+		}
+	]
+}

@@ -1,0 +1,52 @@
+services:
+
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672" # app connection port
+      - "15672:15672" # dashboard port
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+
+  user-db:
+    image: postgres:15
+    container_name: user-db
+    ports:
+      - "5436:5432"
+    environment:
+      POSTGRES_DB: userdb
+      POSTGRES_USER: user_admin
+      POSTGRES_PASSWORD: user_pass
+
+  offer-db:
+    image: postgres:15
+    container_name: offer-db
+    ports:
+      - "5437:5432"
+    environment:
+      POSTGRES_DB: offerdb
+      POSTGRES_USER: offer_admin
+      POSTGRES_PASSWORD: offer_pass
+
+  booking-db:
+    image: postgres:15
+    container_name: booking-db
+    ports:
+      - "5438:5432"
+    environment:
+      POSTGRES_DB: bookingdb
+      POSTGRES_USER: booking_admin
+      POSTGRES_PASSWORD: booking_pass
+
+  notification-db:
+    image: postgres:15
+    container_name: notification-db
+    ports:
+      - "5439:5432"
+    environment:
+      POSTGRES_DB: notificationdb
+      POSTGRES_USER: notif_admin
+      POSTGRES_PASSWORD: notif_pass
